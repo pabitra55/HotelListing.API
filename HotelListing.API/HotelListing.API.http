@@ -1,7 +1,41 @@
 @HotelListing.API_HostAddress = https://localhost:7207
+ 
+
+@apiKey = aAkskajskaHKSAhkAHSkH**&*&#*&#*%8868638268362=
+###
+# @id=1
+GET {{HotelListing.API_HostAddress}}/api/countries
+X-Api-Key: {{apiKey}}
+###
+
+POST {{HotelListing.API_HostAddress}}/api/countries
+Content-Type: application/json
+
+{
+  "name": "Test Country",
+  "shortName": "IC"
+}
 
 ###
-@id=0
+
+DELETE {{HotelListing.API_HostAddress}}/api/countries/{{id}}
+
+###
+
+GET {{HotelListing.API_HostAddress}}/api/countries/{{id}}
+
+###
+
+PUT {{HotelListing.API_HostAddress}}/api/countries/{{id}}
+Content-Type: application/json
+
+{
+  "countryId": 1,
+  "name": "Jamaica",
+  "shortName": "JM"
+}
+###
+
 GET {{HotelListing.API_HostAddress}}/api/hotels
 
 ###
@@ -10,19 +44,18 @@ POST {{HotelListing.API_HostAddress}}/api/hotels
 Content-Type: application/json
 
 {
-  "id": 3,
-  "name": "Jagannath",
-  "address": "Bangalore",
-  "rating": 4.5
+  "Name": "Moon Palace",
+  "Address": "Ocho Rios, Jamaica",
+  "Rating": 5,
+  "CountryId": 1
 }
 
 ###
-
-@id=0
+@id=3
 DELETE {{HotelListing.API_HostAddress}}/api/hotels/{{id}}
 
 ###
-@id=1
+
 GET {{HotelListing.API_HostAddress}}/api/hotels/{{id}}
 
 ###
@@ -31,12 +64,31 @@ PUT {{HotelListing.API_HostAddress}}/api/hotels/{{id}}
 Content-Type: application/json
 
 {
-  
-  "id": 3,
-  "name": "Jagannath",
-  "address": "Bangalore",
-  "rating": 4.5
- 
+  "Id": 3,
+  "Name": "Ocean Coral",
+  "Address": "Trelawny, Jamaica",
+  "Rating": 4.5,
+  "CountryId": 100
 }
 
+
+###
+POST {{HotelListing.API_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+ "email": "admin@gmail.com",
+ "password": "Admin@123",
+ "firstName": "Admin",
+ "lastName": "User"
+}
+
+###
+POST {{HotelListing.API_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+ "email": "admin@gmail.com",
+ "password": "Admin@123"
+}
 ###
