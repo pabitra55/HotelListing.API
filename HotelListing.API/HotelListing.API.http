@@ -1,11 +1,10 @@
 @HotelListing.API_HostAddress = https://localhost:7207
  
-
-@apiKey = aAkskajskaHKSAhkAHSkH**&*&#*&#*%8868638268362=
+ 
 ###
-# @id=1
 GET {{HotelListing.API_HostAddress}}/api/countries
-X-Api-Key: {{apiKey}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZDNjNTczMS1jN2E2LTQ1NjUtODZiMS00ODg1NzU3NzAwNmUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImp0aSI6IjMxMTAxNDAwLTFlN2MtNDA0Yi1hODg3LTkzMDEyMTk2MmQ1YiIsIm5hbWUiOiJBZG1pbiBVc2VyIiwiZXhwIjoxNzkyMzkyODE3LCJpc3MiOiJIb3RlbExpc3RpbmdBUEkiLCJhdWQiOiJIb3RlbExpc3RpbmdBUElDbGllbnQifQ.kFn1wLrPSfjsmqAgPMvmW9TML181Fr3OrSUuKT38p4M
+
 ###
 
 POST {{HotelListing.API_HostAddress}}/api/countries
