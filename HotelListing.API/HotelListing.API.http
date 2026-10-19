@@ -1,9 +1,9 @@
 @HotelListing.API_HostAddress = https://localhost:7207
- 
+@apiKey = dXNlcjFAbG9jYWxob3N0LmNvbTpQQHNzrbd29yZDE=
  
 ###
 GET {{HotelListing.API_HostAddress}}/api/countries
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZDNjNTczMS1jN2E2LTQ1NjUtODZiMS00ODg1NzU3NzAwNmUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImp0aSI6IjMxMTAxNDAwLTFlN2MtNDA0Yi1hODg3LTkzMDEyMTk2MmQ1YiIsIm5hbWUiOiJBZG1pbiBVc2VyIiwiZXhwIjoxNzkyMzkyODE3LCJpc3MiOiJIb3RlbExpc3RpbmdBUEkiLCJhdWQiOiJIb3RlbExpc3RpbmdBUElDbGllbnQifQ.kFn1wLrPSfjsmqAgPMvmW9TML181Fr3OrSUuKT38p4M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZDNjNTczMS1jN2E2LTQ1NjUtODZiMS00ODg1NzU3NzAwNmUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImp0aSI6IjQxYTNjMTliLTdhMTEtNGY0ZS04YmVmLWZkNGYxOTY3MDM3OSIsIm5hbWUiOiJBZG1pbiBVc2VyIiwiZXhwIjoxNzkyNDA0ODAwLCJpc3MiOiJIb3RlbExpc3RpbmdBUEkiLCJhdWQiOiJIb3RlbExpc3RpbmdBUElDbGllbnQifQ.IZRitInpTSdPljxItq4kpaNUiO8kj9tVkkOuzGaSuvE
 
 ###
 
@@ -90,4 +90,8 @@ Content-Type: application/json
  "email": "admin@gmail.com",
  "password": "Admin@123"
 }
+###
+
+GET {{HotelListing.API_HostAddress}}/api/apikey
+X-Api-Key: dXNlcjFAbG9jYWxob3N0LmNvbTpQQHNzrbd29yZDE=
 ###

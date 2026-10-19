@@ -11,15 +11,12 @@ public class HotelListingDbContext(DbContextOptions<HotelListingDbContext> optio
     public DbSet<Hotel> Hotels { get; set; }
 
     public DbSet<ApiKey> ApiKeys { get; set; }
+    public DbSet<HotelAdmin> HotelAdmins { get; set; }
+    public DbSet<Booking> Bookings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        builder.Entity<ApiKey>(b =>
-        {
-            b.HasIndex(k => k.Key).IsUnique();
-        });
-
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }
