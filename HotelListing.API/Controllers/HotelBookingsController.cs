@@ -1,6 +1,7 @@
 ﻿using HotelListing.Api.Controllers;
 using HotelListing.API.Contracts;
 using HotelListing.API.DTOs.Booking;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,6 +10,7 @@ namespace HotelListing.API.Controllers;
 
 [Route("api/hotels/{hotelId:int}/bookings")]
 [ApiController]
+[Authorize]
 public class HotelBookingsController(IBookingService bookingService) : BaseApiController
 {
     // GET api/hotels/5/bookings
@@ -35,6 +37,39 @@ public class HotelBookingsController(IBookingService bookingService) : BaseApiCo
         )
     {
         var result = await bookingService.UpdateBookingAsync(hotelId, bookingId, updateBookingDto);
+        return ToActionResult(result);
+    }
+
+
+    [HttpPut("{bookingId:int}/cancel")]
+
+    public async Task<ActionResult> CancelBooking(
+        [FromRoute] int hotelId,
+        [FromRoute] int bookingId)
+    {
+        var result = await bookingService.CancelBookingAsync(hotelId, bookingId);
+        return ToActionResult(result);
+    }
+
+
+    [HttpPut("{bookingId:int}/admin/cancel")]
+    [Authorize(Roles = "Hotel Admin, Administrator")]
+    public async Task<ActionResult> AdminCancelBooking(
+        [FromRoute] int hotelId,
+        [FromRoute] int bookingId)
+    {
+        var result = await bookingService.AdminCancelBookingAsync(hotelId, bookingId);
+        return ToActionResult(result);
+    }
+
+
+    [HttpPut("{bookingId:int}/admin/confirm")]
+    [Authorize(Roles = "Hotel Admin, Administrator")]
+    public async Task<ActionResult> AdminConfirmBooking(
+        [FromRoute] int hotelId,
+        [FromRoute] int bookingId)
+    {
+        var result = await bookingService.AdminConfirmBookingAsync(hotelId, bookingId);
         return ToActionResult(result);
     }
 

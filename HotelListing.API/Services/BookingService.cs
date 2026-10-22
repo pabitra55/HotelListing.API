@@ -9,7 +9,7 @@ using System.Security;
 
 namespace HotelListing.API.Services;
 
-public class BookingService(HotelListingDbContext context, IHttpContextAccessor httpContextAccessor) : IBookingService
+public class BookingService(HotelListingDbContext context, IUsersService usersService) : IBookingService
 {
     public async Task<Result<IEnumerable<GetBookingsDto>>> GetBookingsForHotelsAsync(int hotelId)
     {
@@ -42,10 +42,7 @@ public class BookingService(HotelListingDbContext context, IHttpContextAccessor 
 
     public async Task<Result<GetBookingsDto>> CreateBookings(CreateBookingsDto dto)
     {
-        var userId = httpContextAccessor?
-            .HttpContext?
-            .User
-            .FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+        var userId = usersService.UserId;
 
         if (string.IsNullOrWhiteSpace(userId))
         {
@@ -123,10 +120,7 @@ public class BookingService(HotelListingDbContext context, IHttpContextAccessor 
 
     public async Task<Result<GetBookingsDto>> UpdateBookingAsync(int hotelId, int bookingId, UpdateBookingDto dto)
     {
-        var userId = httpContextAccessor?
-           .HttpContext?
-           .User
-           .FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+        var userId = usersService.UserId;
 
         if (string.IsNullOrWhiteSpace(userId))
         {
@@ -197,5 +191,109 @@ public class BookingService(HotelListingDbContext context, IHttpContextAccessor 
                         booking.UpdatedAtUtc
             );
         return Result<GetBookingsDto>.Success(updated);
+    }
+
+    public async Task<Result> CancelBookingAsync(int hotelId, int bookingId)
+    {
+        var userId = usersService.UserId;
+
+        var booking = await context.Bookings
+          .Include(b => b.Hotel)
+          .FirstOrDefaultAsync(b =>
+              b.Id == bookingId
+              && b.HotelId == hotelId
+              && b.UserId == userId
+          );
+
+        if (booking is null)
+        {
+            return Result.Failure(new Error(ErrorCodes.NotFound, $"Booking '{bookingId}'  was not found."));
+        }
+
+
+        if (booking.Status == BookingStatus.Cancelled)
+        {
+            return Result.Failure(new Error(ErrorCodes.Conflict, $"Cancelled bookings cannot be modified."));
+        }
+
+        booking.Status = BookingStatus.Cancelled;
+        booking.UpdatedAtUtc = DateTime.UtcNow;
+        await context.SaveChangesAsync();
+        return Result.Success();
+    }
+
+    //public Task<Result> ConfirmBookingAsync(int hotelId, int bookingId)
+    //{
+
+    //}
+
+    public async Task<Result> AdminCancelBookingAsync(int hotelId, int bookingId)
+    {
+        var userId = usersService.UserId;
+        var isHotelAdminUser = await context.HotelAdmins.AnyAsync(q => q.UserId == userId && q.Hotelid == hotelId);
+
+        if (!isHotelAdminUser)
+        {
+            return Result.Failure(new Error(ErrorCodes.Forbid, $"You are not an admin of the selected Hotel."));
+        }
+
+        var booking = await context.Bookings
+        .Include(b => b.Hotel)
+        .FirstOrDefaultAsync(b =>
+            b.Id == bookingId
+            && b.HotelId == hotelId
+            && b.UserId == userId
+        );
+
+        if (booking is null)
+        {
+            return Result.Failure(new Error(ErrorCodes.NotFound, $"Booking '{bookingId}'  was not found."));
+        }
+
+        if (booking.Status == BookingStatus.Cancelled)
+        {
+            return Result.Failure(new Error(ErrorCodes.Conflict, $"The booking has already been cancelled."));
+        }
+
+        booking.Status = BookingStatus.Cancelled;
+        booking.UpdatedAtUtc = DateTime.UtcNow;
+        await context.SaveChangesAsync();
+
+        return Result.Success();
+    }
+
+    public async Task<Result> AdminConfirmBookingAsync(int hotelId, int bookingId)
+    {
+        var userId = usersService.UserId;
+        var isHotelAdminUser = await context.HotelAdmins.AnyAsync(q => q.UserId == userId && q.Hotelid == hotelId);
+
+        if (!isHotelAdminUser)
+        {
+            return Result.Failure(new Error(ErrorCodes.Forbid, $"You are not an admin of the selected Hotel."));
+        }
+
+        var booking = await context.Bookings
+        .Include(b => b.Hotel)
+        .FirstOrDefaultAsync(b =>
+            b.Id == bookingId
+            && b.HotelId == hotelId
+            && b.UserId == userId
+        );
+
+        if (booking is null)
+        {
+            return Result.Failure(new Error(ErrorCodes.NotFound, $"Booking '{bookingId}'  was not found."));
+        }
+
+        if (booking.Status == BookingStatus.Cancelled)
+        {
+            return Result.Failure(new Error(ErrorCodes.Conflict, $"The booking has already been cancelled."));
+        }
+
+        booking.Status = BookingStatus.Confirmed;
+        booking.UpdatedAtUtc = DateTime.UtcNow;
+        await context.SaveChangesAsync();
+
+        return Result.Success();
     }
 }

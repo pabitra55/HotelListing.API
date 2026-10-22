@@ -1,12 +1,14 @@
 ﻿using HotelListing.Api.Contracts;
 using HotelListing.Api.DTOs.Hotel;
 using HotelListing.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelListing.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class HotelsController(IHotelsService hotelsService) : BaseApiController
 {
     // GET: api/Hotels
@@ -27,6 +29,7 @@ public class HotelsController(IHotelsService hotelsService) : BaseApiController
 
     // PUT: api/Hotels/5
     [HttpPut("{id}")]
+    [Authorize(Roles = "Administrator")]
     public async Task<IActionResult> PutHotel(int id, UpdateHotelDto hotelDto)
     {
         if (id != hotelDto.Id)
@@ -40,6 +43,7 @@ public class HotelsController(IHotelsService hotelsService) : BaseApiController
 
     // POST: api/Hotels
     [HttpPost]
+    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult<GetHotelDto>> PostHotel(CreateHotelDto hotelDto)
     {
         var result = await hotelsService.CreateHotelAsync(hotelDto);
@@ -50,6 +54,7 @@ public class HotelsController(IHotelsService hotelsService) : BaseApiController
 
     // DELETE: api/Hotels/5
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Administrator")]
     public async Task<IActionResult> DeleteHotel(int id)
     {
         var result = await hotelsService.DeleteHotelAsync(id);
