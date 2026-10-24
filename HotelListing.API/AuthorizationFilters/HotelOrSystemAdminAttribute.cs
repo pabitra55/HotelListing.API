@@ -1,14 +1,18 @@
-﻿using HotelListing.Api.Data;
+﻿using HotelListing.API.Common.Constants;
+using HotelListing.API.Domain.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
-
+using System.Security.Claims;
 namespace HotelListing.API.AuthorizationFilters;
 
-
-public class HotelOrSystemAdminAttribute(Type type) : TypeFilterAttribute(type)
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
+public sealed class HotelOrSystemAdminAttribute : TypeFilterAttribute
 {
-
+    public HotelOrSystemAdminAttribute() : base(typeof(HotelOrSystemAdminFilter))
+    {
+    }
 }
 
 
@@ -23,12 +27,13 @@ public class HotelOrSystemAdminFilter(HotelListingDbContext dbContext) : IAsyncA
             return;
         }
 
-        if (httpUser!.IsInRole("Administrator"))
+        if (httpUser!.IsInRole(RoleNames.Administrator))
         {
             return;
         }
 
-        var userId = httpUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+        var userId = httpUser.FindFirst(JwtRegisteredClaimNames.Sub)?.Value
+            ?? httpUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrWhiteSpace(userId))
         {
             context.Result = new ForbidResult();
@@ -36,16 +41,23 @@ public class HotelOrSystemAdminFilter(HotelListingDbContext dbContext) : IAsyncA
         }
 
         // try to get the hotelId from route values
-        context.RouteData.Values.TryGetValue("hotelId", out var hotelId);
-        int.TryParse(hotelId?.ToString(), out int parsedHotelId);
-        if (parsedHotelId == 0)
+        context.RouteData.Values.TryGetValue("hotelId", out var hotelIdObj);
+        int.TryParse(hotelIdObj?.ToString(), out int hotelId);
+        if (hotelId == 0)
         {
             context.Result = new ForbidResult();
             return;
         }
 
         // Check if user is an admin for this specific hotel
-        var isHotelAdminUser = await dbContext.HotelAdmins.AnyAsync(q => q.UserId == userId && q.Hotelid == hotelId);
+        var isHotelAdminUser = await dbContext.HotelAdmins
+            .AnyAsync(q => q.UserId == userId && q.Hotelid == hotelId);
+
+        if (!isHotelAdminUser)
+        {
+            context.Result = new ForbidResult();
+            return;
+        }
     }
 }
 

@@ -1,18 +1,21 @@
 @HotelListing.API_HostAddress = https://localhost:7207
 @apiKey = dXNlcjFAbG9jYWxob3N0LmNvbTpQQHNzrbd29yZDE=
- 
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMGI2MzZiZS1lZmVlLTQxZDQtODUwMS03MTg1YjcxYzJiNzAiLCJlbWFpbCI6ImFkbWluaXN0cmF0b3JAZ21haWwuY29tIiwianRpIjoiYzc2MDk5OWMtM2ExNi00ZmJhLWJmMTUtNjk3NGQyOGJkMDM4IiwibmFtZSI6IkFkbWluaXN0cmF0b3IgQWRtaW5pc3RyYXRvciB1c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW5pc3RyYXRvciIsImV4cCI6MTc5Mjg2MDA0NSwiaXNzIjoiSG90ZWxMaXN0aW5nQVBJIiwiYXVkIjoiSG90ZWxMaXN0aW5nQVBJQ2xpZW50In0.vnTWeF--c0n343jnjOBe2uI_bV5G9ynu8MaALyPwYZc
+
+
+
 ###
 GET {{HotelListing.API_HostAddress}}/api/countries
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZDNjNTczMS1jN2E2LTQ1NjUtODZiMS00ODg1NzU3NzAwNmUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImp0aSI6IjQxYTNjMTliLTdhMTEtNGY0ZS04YmVmLWZkNGYxOTY3MDM3OSIsIm5hbWUiOiJBZG1pbiBVc2VyIiwiZXhwIjoxNzkyNDA0ODAwLCJpc3MiOiJIb3RlbExpc3RpbmdBUEkiLCJhdWQiOiJIb3RlbExpc3RpbmdBUElDbGllbnQifQ.IZRitInpTSdPljxItq4kpaNUiO8kj9tVkkOuzGaSuvE
+Authorization: Bearer {{token}}
 
 ###
 
 POST {{HotelListing.API_HostAddress}}/api/countries
 Content-Type: application/json
-
+Authorization: Bearer {{token}}
 {
-  "name": "Test Country",
-  "shortName": "IC"
+  "name": "Italy",
+  "shortName": "IT"
 }
 
 ###
@@ -36,16 +39,18 @@ Content-Type: application/json
 ###
 
 GET {{HotelListing.API_HostAddress}}/api/hotels
+Authorization: Bearer {{token}}
+
 
 ###
-
+// User with administrator role can add hotels
 POST {{HotelListing.API_HostAddress}}/api/hotels
 Content-Type: application/json
-
+Authorization: Bearer {{token}}
 {
-  "Name": "Moon Palace",
-  "Address": "Ocho Rios, Jamaica",
-  "Rating": 5,
+  "Name": "Golden Sands Resort",
+  "Address": "Falmouth, Jamaica",
+  "Rating": 4,
   "CountryId": 1
 }
 
@@ -94,4 +99,7 @@ Content-Type: application/json
 
 GET {{HotelListing.API_HostAddress}}/api/apikey
 X-Api-Key: dXNlcjFAbG9jYWxob3N0LmNvbTpQQHNzrbd29yZDE=
+###
+
+
 ###
