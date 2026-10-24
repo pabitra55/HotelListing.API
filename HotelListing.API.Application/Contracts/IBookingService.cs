@@ -1,5 +1,6 @@
 ﻿using HotelListing.Api.Common.Results;
 using HotelListing.API.Application.DTOs.Booking;
+using HotelListing.API.Common.Models.Paging;
 
 namespace HotelListing.API.Application.Contracts
 {
@@ -9,8 +10,8 @@ namespace HotelListing.API.Application.Contracts
         Task<Result> AdminConfirmBookingAsync(int hotelId, int bookingId);
         Task<Result> CancelBookingAsync(int hotelId, int bookingId);
         Task<Result<GetBookingsDto>> CreateBookings(CreateBookingsDto dto);
-        Task<Result<IEnumerable<GetBookingsDto>>> GetBookingsForHotelAsync(int hotelId); 
-        Task<Result<IEnumerable<GetBookingsDto>>> GetUserBookingsForHotelAsync(int hotelId);
+        Task<Result<PagedResult<GetBookingsDto>>> GetBookingsForHotelAsync(int hotelId, PaginationParameters paginationParameters); 
+        Task<Result<PagedResult<GetBookingsDto>>> GetUserBookingsForHotelAsync(int hotelId, PaginationParameters paginationParameters);
         Task<Result<GetBookingsDto>> UpdateBookingAsync(int hotelId, int bookingId, UpdateBookingDto updateBookingDto);
     }
 }

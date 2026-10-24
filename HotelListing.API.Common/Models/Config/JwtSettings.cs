@@ -1,4 +1,4 @@
-﻿namespace HotelListing.API.Common.Models;
+﻿namespace HotelListing.API.Common.Models.Config;
 
 public sealed class JwtSettings
 {

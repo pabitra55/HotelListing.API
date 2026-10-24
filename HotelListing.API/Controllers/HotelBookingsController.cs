@@ -2,6 +2,7 @@
 using HotelListing.API.Application.Contracts;
 using HotelListing.API.Application.DTOs.Booking;
 using HotelListing.API.AuthorizationFilters;
+using HotelListing.API.Common.Models.Paging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,22 +15,20 @@ namespace HotelListing.API.Controllers;
 [Authorize]
 public class HotelBookingsController(IBookingService bookingService) : BaseApiController
 {
- 
-
 
     // GET api/hotels/5/bookings 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetBookingsDto>>> GetAdminBookings([FromRoute] int hotelId)
+    public async Task<ActionResult<PagedResult<GetBookingsDto>>> GetAdminBookings([FromRoute] int hotelId, [FromQuery] PaginationParameters paginationParameters)
     {
-        var result = await bookingService.GetBookingsForHotelAsync(hotelId);
+        var result = await bookingService.GetBookingsForHotelAsync(hotelId, paginationParameters);
         return ToActionResult(result);
     }
 
     // GET api/hotels/5/bookings 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetBookingsDto>>> GetBookings([FromRoute] int hotelId)
+    public async Task<ActionResult<PagedResult<GetBookingsDto>>> GetBookings([FromRoute] int hotelId, [FromQuery] PaginationParameters paginationParameters)
     {
-        var result = await bookingService.GetUserBookingsForHotelAsync(hotelId);
+        var result = await bookingService.GetUserBookingsForHotelAsync(hotelId, paginationParameters);
         return ToActionResult(result);
     }
 
@@ -65,9 +64,9 @@ public class HotelBookingsController(IBookingService bookingService) : BaseApiCo
 
     [HttpGet("admin")]
     [HotelOrSystemAdmin]
-    public async Task<ActionResult<IEnumerable<GetBookingsDto>>> GetBookingsAdmin([FromRoute] int hotelId)
+    public async Task<ActionResult<PagedResult<GetBookingsDto>>> GetBookingsAdmin([FromRoute] int hotelId, [FromQuery] PaginationParameters paginationParameters)
     {
-        var result = await bookingService.GetBookingsForHotelAsync(hotelId);
+        var result = await bookingService.GetBookingsForHotelAsync(hotelId, paginationParameters);
         return ToActionResult(result);
     }
 

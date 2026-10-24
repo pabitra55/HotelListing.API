@@ -5,12 +5,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using HotelListing.API.Common.Constants;
-using HotelListing.API.Common.Models;
 using Microsoft.Extensions.Options;
 using HotelListing.API.Domain.Data;
 using Microsoft.AspNetCore.Http;
 using HotelListing.API.Application.DTOs.Auth;
 using HotelListing.API.Application.Contracts;
+using HotelListing.API.Common.Models.Config;
 
 
 namespace HotelListing.API.Application.Services;

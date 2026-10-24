@@ -1,6 +1,7 @@
 @HotelListing.API_HostAddress = https://localhost:7207
 @apiKey = dXNlcjFAbG9jYWxob3N0LmNvbTpQQHNzrbd29yZDE=
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMGI2MzZiZS1lZmVlLTQxZDQtODUwMS03MTg1YjcxYzJiNzAiLCJlbWFpbCI6ImFkbWluaXN0cmF0b3JAZ21haWwuY29tIiwianRpIjoiYzc2MDk5OWMtM2ExNi00ZmJhLWJmMTUtNjk3NGQyOGJkMDM4IiwibmFtZSI6IkFkbWluaXN0cmF0b3IgQWRtaW5pc3RyYXRvciB1c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW5pc3RyYXRvciIsImV4cCI6MTc5Mjg2MDA0NSwiaXNzIjoiSG90ZWxMaXN0aW5nQVBJIiwiYXVkIjoiSG90ZWxMaXN0aW5nQVBJQ2xpZW50In0.vnTWeF--c0n343jnjOBe2uI_bV5G9ynu8MaALyPwYZc
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMGI2MzZiZS1lZmVlLTQxZDQtODUwMS03MTg1YjcxYzJiNzAiLCJlbWFpbCI6ImFkbWluaXN0cmF0b3JAZ21haWwuY29tIiwianRpIjoiYzE3YjU4YzctYzQwMi00OTg4LTgyOWEtNjgxYWFkMDRlYzY5IiwibmFtZSI6IkFkbWluaXN0cmF0b3IgQWRtaW5pc3RyYXRvciB1c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW5pc3RyYXRvciIsImV4cCI6MTc5Mjg2OTczMywiaXNzIjoiSG90ZWxMaXN0aW5nQVBJIiwiYXVkIjoiSG90ZWxMaXN0aW5nQVBJQ2xpZW50In0.ZlxriFM8EY2ivu_062l6zamxahduVQ0IiAXIt4h4kUA
+
 
 
 
@@ -25,7 +26,8 @@ DELETE {{HotelListing.API_HostAddress}}/api/countries/{{id}}
 ###
 
 GET {{HotelListing.API_HostAddress}}/api/countries/{{id}}
-
+Content-Type: application/json
+Authorization: Bearer {{token}}
 ###
 
 PUT {{HotelListing.API_HostAddress}}/api/countries/{{id}}
@@ -39,6 +41,13 @@ Content-Type: application/json
 ###
 
 GET {{HotelListing.API_HostAddress}}/api/hotels
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+GET {{HotelListing.API_HostAddress}}/api/countries/1/hotel
+Content-Type: application/json
 Authorization: Bearer {{token}}
 
 

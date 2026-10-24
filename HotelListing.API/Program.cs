@@ -2,7 +2,7 @@ using HotelListing.API.Application.Contracts;
 using HotelListing.API.Application.MappingProfiles;
 using HotelListing.API.Application.Services;
 using HotelListing.API.Common.Constants;
-using HotelListing.API.Common.Models;
+using HotelListing.API.Common.Models.Config;
 using HotelListing.API.Domain.Data;
 using HotelListing.API.Handler;
 using Microsoft.AspNetCore.Authentication;

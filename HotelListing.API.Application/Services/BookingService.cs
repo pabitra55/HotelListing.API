@@ -1,50 +1,54 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using HotelListing.Api.Common.Results;
-using HotelListing.API.Common.Constants;
-using Microsoft.EntityFrameworkCore;
-using HotelListing.API.Domain.Data.Enums;
-using HotelListing.API.Domain.Data;
 using HotelListing.API.Application.Contracts;
 using HotelListing.API.Application.DTOs.Booking;
+using HotelListing.API.Common.Constants;
+using HotelListing.API.Common.Data.Enums;
+using HotelListing.API.Common.Models.Extensions;
+using HotelListing.API.Common.Models.Paging;
+using HotelListing.API.Domain.Data;
+using Microsoft.EntityFrameworkCore;
 namespace HotelListing.API.Application.Services;
 
 public class BookingService(HotelListingDbContext context, IUsersService usersService, IMapper mapper) : IBookingService
 {
 
-    public async Task<Result<IEnumerable<GetBookingsDto>>> GetUserBookingsForHotelAsync(int hotelId)
+    public async Task<Result<PagedResult<GetBookingsDto>>> GetBookingsForHotelAsync(int hotelId, PaginationParameters paginationParameters)
     {
         var hotelExists = await context.Hotels.AnyAsync(h => h.Id == hotelId);
 
         if (!hotelExists)
         {
-            return Result<IEnumerable<GetBookingsDto>>.Failure(new Error(ErrorCodes.NotFound, $"Hotel '{hotelId}' was not found."));
+            return Result<PagedResult<GetBookingsDto>>.Failure(new Error(ErrorCodes.NotFound, $"Hotel '{hotelId}' was not found."));
         }
 
         var bookings = await context.Bookings
             .Where(b => b.HotelId == hotelId)
             .OrderBy(b => b.CheckIn)
             .ProjectTo<GetBookingsDto>(mapper.ConfigurationProvider)
-            .ToListAsync();
-        return Result<IEnumerable<GetBookingsDto>>.Success(bookings);
+            .ToPagedResultAsync(paginationParameters);
+
+        return Result<PagedResult<GetBookingsDto>>.Success(bookings);
     }
 
-    public async Task<Result<IEnumerable<GetBookingsDto>>> GetUserBookingsForHotelsAsync(int hotelId)
+    public async Task<Result<PagedResult<GetBookingsDto>>> GetUserBookingsForHotelAsync(int hotelId, PaginationParameters paginationParameters)
     {
         var userId = usersService.UserId;
 
         var hotelExists = await context.Hotels.AnyAsync(h => h.Id == hotelId);
         if (!hotelExists)
         {
-            return Result<IEnumerable<GetBookingsDto>>.Failure(new Error(ErrorCodes.NotFound, $"Hotel '{hotelId}' was not found."));
+            return Result<PagedResult<GetBookingsDto>>.Failure(new Error(ErrorCodes.NotFound, $"Hotel '{hotelId}' was not found."));
         }
 
         var bookings = await context.Bookings
             .Where(b => b.HotelId == hotelId && b.UserId == userId)
             .OrderBy(b => b.CheckIn)
             .ProjectTo<GetBookingsDto>(mapper.ConfigurationProvider)
-            .ToListAsync();
-        return Result<IEnumerable<GetBookingsDto>>.Success(bookings);
+            .ToPagedResultAsync(paginationParameters);
+
+        return Result<PagedResult<GetBookingsDto>>.Success(bookings);
     }
 
     public async Task<Result<GetBookingsDto>> CreateBookings(CreateBookingsDto dto)
@@ -247,18 +251,5 @@ public class BookingService(HotelListingDbContext context, IUsersService usersSe
         return Result.Success();
     }
 
-    public async Task<Result<IEnumerable<GetBookingsDto>>> GetBookingsForHotelAsync(int hotelId)
-    {
-        var hotelExists = await context.Hotels.AnyAsync(h => h.Id == hotelId);
-        if (!hotelExists)
-            return Result<IEnumerable<GetBookingsDto>>.Failure(new Error(ErrorCodes.NotFound, $"Hotel '{hotelId}' was not found."));
 
-        var bookings = await context.Bookings
-            .Where(b => b.HotelId == hotelId)
-            .OrderBy(b => b.CheckIn)
-            .ProjectTo<GetBookingsDto>(mapper.ConfigurationProvider)
-            .ToListAsync();
-
-        return Result<IEnumerable<GetBookingsDto>>.Success(bookings);
-    }
 }
